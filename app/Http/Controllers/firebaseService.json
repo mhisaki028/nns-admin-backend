@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "androidpatientapp",
+  "private_key_id": "072332bf724b40e099b18645b4bf184f10e1a081",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDUiftyuGAo+9kp\nsdmUES0t52y+ZrE9jVUxVO0Uh6dMXZQ1S66LsuHCYlGP5sy1ZLNgzZwD/5Q39TpZ\nmipjQ166Yd+LNeDp3a82Owscc6Z9JTbVWGXY3q8ChAInSl3kZVldn9aykqF6GtNK\nUBdCtPZTlkEp39tk8XzStETDD0HWENv2CAPRFV9GhCQALP8O2W1JF+VzJQfPyT2u\nSYqicBtYq9Do9jwqpoBa1QXchs32GTnIqhQm9mWQuhqJaIDhpvmO0tZQ94MVjVUn\nfp3gg2TKLDgSmlMpqayePrgZlJOAD5tIFUZcnQhC78kh9fnNm2fGf5YsIOSehuzN\nz5xSZJKnAgMBAAECggEAFtGM9ayg5QA2Y65ssePENNJMulvJJKweB5KwH3ekTmPE\n9pHeYVuTtxcaMvfFu6XeR62GK2cPBpD6skWweQFx0/3lDmD6+ZuA5QgixxZi5hBk\nRN8y6WftueNACJrd3hhu0fPyt4UG9taWymWIkci0TOtr/0RsSCKl0vNivInQo4bw\nBKG7Y5RHHIyosHIc9jLCNNTJudl68LGX9pDOoolT1EmVzSF+rOduKrpyrB6ZoLhG\nHzGcY4DWAboQ50DC2a20l7FT4cr+JACURJhSthWm1t+Vn/V0if31J5l5zMwDhNPo\nn1Qaxyk2m06xSwYLNyl3Qz2P31gQb0I3tyRSAMePPQKBgQD2lLki/mg0oR4z3ZtL\nVk4MLbgsXC+2yJT4MKMNr1ekaoEdaleqOoy4Uj2tdoiP2RQl2ef44auA8yhkAhzN\nhPjc1QCj+bUFubgKxXQWpe2fIquo1/h5ytbbBtvY1l5abCeVvcCqLoxJtLF414HG\nqESJNnYNkNGyC8kw6808GQ6V5QKBgQDcqF42jJoWsjBzpS/VfEqgVo1CyK2HCgKz\nCRxCk/p9T7ts2radTJ0o0FaUj+KD+FY2b/1le5GH+AWYee5RmhZY1DbP9jF4gHBl\nPu2Db6rb64kzW/f7HjNYQB8wwGVVh4FX4rpby7u/uzViR9im38YNywDEZOgCkM0c\n6RWl0/N9mwKBgQC0ZTXU3h7Kch0wgK3+PdO3oTMecQsPREuID70aY+9QgAKZzJT6\nGv+cUb6Byzg5VO0ii/rj3+Wi30HreIgt61xN4x8m16aR279DUhWOBDKFu82uJuLH\n55esgaYRSzOYH4wORtZPKuLDgYhdCf0No0kQwWE4p3xiL7EvMzPhBcvf6QKBgQCV\n/UytP72uF8mfknWFZEtF2g+Die2KkV9sW5D+IKBwdbYtNC5VljJt/9AahAOxOSlB\nL7bLOMef6RPEpX09ssPl9bqcefj+tC+yYqgIY+t8Ogq1Apr583lrT4rkFKPNE6L0\nHoYWx9IDbjnHaJb4N7vkvEz1MrISrGMAd9/jLMOiaQKBgQCgNp5hPED3FX4tRSPa\n72mW0enyyxN3gVIZJVc9pN3lpbpxactWopzqQyoXHVjuL8GGSystuUAIxZLJ5VGt\n/2qXG9qUz5lkvKCqbrz9tZVfXmwLN+NTc/i8EZ9Nvy425xcQ3++tbphu9XyEk0Ro\nG4pMuJUTbZCju5L7qDXA4wmPKA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-228ag@androidpatientapp.iam.gserviceaccount.com",
+  "client_id": "116705223439718507504",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-228ag%40androidpatientapp.iam.gserviceaccount.com"
+}
