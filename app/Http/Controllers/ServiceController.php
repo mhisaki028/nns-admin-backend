@@ -11,14 +11,19 @@ class ServiceController extends Controller
     public function index(){
     	$services = Service::all();
 
-    	return view ('service',['services'=>$services]);
+        $c_service = count($services);
+
+    	return view ('service',['services'=>$services, 'c_service'=>$c_service]);
 
     }
 
     public function lcService(){
         $lc_services = Service::all();
 
-        return view ('lclabservices',['lc_services'=>$lc_services]);
+        $c_service = count($lc_services);
+
+
+        return view ('lclabservices',['lc_services'=>$lc_services, 'c_service'=>$c_service]);
     }
 
     public function addLCService(Request $request){
@@ -42,11 +47,11 @@ class ServiceController extends Controller
 
     }
 
-    public function deleteLCService($service_id){
-    	Service::where('service_id', $service_id)
-            ->delete();
+    public function deleteLCService(Request $request){
+    	 $services = Service::findOrFail($request->service_id)->delete();
+       
 
-            return redirect('/lclabservices');
+            return back();
     }
 
 

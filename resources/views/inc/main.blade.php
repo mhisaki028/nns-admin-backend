@@ -16,8 +16,14 @@
     <link href="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
      <!-- Calendar CSS -->
     <link href="plugins/bower_components/calendar/dist/fullcalendar.css" rel="stylesheet" />
+    <link href="plugins/bower_components/owl.carousel/owl.carousel.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="plugins/bower_components/owl.carousel/owl.theme.default.css" rel="stylesheet" type="text/css" />
     <!-- animation CSS -->
     <link href="css/animate.css" rel="stylesheet">
+
+  <link href="plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+
 
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
@@ -81,6 +87,16 @@
     <script src="plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
     <!--FooTable init-->
     <script src="js/footable-init.js"></script>
+        <!-- jQuery for carousel -->
+    <script src="plugins/bower_components/owl.carousel/owl.carousel.min.js"></script>
+    <script src="plugins/bower_components/owl.carousel/owl.custom.js"></script>
+
+    <script src="plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+
+
+   
+
+
     
     <!--Style Switcher -->
     <script src="plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>
@@ -165,7 +181,7 @@
 });
 
    /////////////Services
-    $(document).on('show.bs.modal','#modal-editS', function (event) {
+    $(document).on('show.bs.modal','#modal-editLCS', function (event) {
 
       console.log('Modal Opened');
       var button = $(event.relatedTarget)
@@ -225,6 +241,172 @@
      
      
 });
+
+$(document).on('show.bs.modal','#modal-view', function (event) {
+
+      console.log('Modal Opened');
+      var button = $(event.relatedTarget)
+      var id = button.data('id')
+      var rno = button.data('rno')
+      var pname = button.data('pname')
+      var padd = button.data('padd')
+      var pno = button.data('pno')
+      var serv = button.data('serv')
+      var total = button.data('total')
+      var med = button.data('med')
+      var stat = button.data('stat')
+      var pay = button.data('pay')
+      
+
+      var modal = $(this)
+      modal.find('.modal-body #id').val(id)
+      modal.find('.modal-body #request_no').val(rno)
+      modal.find('.modal-body #patient_name').val(pname)
+      modal.find('.modal-body #patient_address').val(padd)
+      modal.find('.modal-body #patient_phone').val(pno)
+      modal.find('.modal-body #service').val(serv)
+      modal.find('.modal-body #total').val(total)
+      modal.find('.modal-body #medtech').val(med)
+      modal.find('.modal-body #status').val(stat)
+      modal.find('.modal-body #payment').val(pay)
+     
+     
+});
+
+
+
+  $(document).on('show.bs.modal','#modal-delete', function (event) {
+
+      console.log('Modal Opened');
+      var button = $(event.relatedTarget)
+      var mid = button.data('mid')
+   
+
+      var modal = $(this)
+      modal.find('.modal-body #medtech_id').val(mid)
+   
+    
+     
+});
+
+   $(document).on('show.bs.modal','#modal-deleteServ', function (event) {
+
+      console.log('Modal Opened');
+      var button = $(event.relatedTarget)
+      var sid = button.data('sid')
+   
+
+      var modal = $(this)
+      modal.find('.modal-body #service_id').val(sid)
+   
+    
+     
+});
+
+   $(document).on('show.bs.modal','#modal-confirm', function (event) {
+
+      console.log('Modal Opened');
+      var button = $(event.relatedTarget)
+      var id = button.data('id')
+   
+
+      var modal = $(this)
+      modal.find('.modal-body #id').val(id)
+   
+    
+     
+});
+
+   $(document).on('show.bs.modal','#modal-upload', function (event) {
+
+      console.log('Modal Opened');
+      var button = $(event.relatedTarget)
+      var rno = button.data('rno')
+      var sname = button.data('sname')
+      var total = button.data('total')
+   
+
+      var modal = $(this)
+      modal.find('.modal-body #request_no').val(rno)
+      modal.find('.modal-body #service').val(sname)
+      modal.find('.modal-body #totalfee').val(total)
+   
+    
+     
+});
+
+    (function(document) {
+    'use strict';
+
+    var LightTableFilter = (function(Arr) {
+
+        var _input;
+    var _select;
+
+        function _onInputEvent(e) {
+            _input = e.target;
+            var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+            Arr.forEach.call(tables, function(table) {
+                Arr.forEach.call(table.tBodies, function(tbody) {
+                    Arr.forEach.call(tbody.rows, _filter);
+                });
+            });
+        }
+    
+        function _onSelectEvent(e) {
+            _select = e.target;
+            var tables = document.getElementsByClassName(_select.getAttribute('data-table'));
+            Arr.forEach.call(tables, function(table) {
+                Arr.forEach.call(table.tBodies, function(tbody) {
+                    Arr.forEach.call(tbody.rows, _filterSelect);
+                });
+            });
+        }
+
+        function _filter(row) {
+      
+            var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+            row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+
+        }
+    
+        function _filterSelect(row) {
+     
+            var text_select = row.textContent.toLowerCase(), val_select = _select.options[_select.selectedIndex].value.toLowerCase();
+            row.style.display = text_select.indexOf(val_select) === -1 ? 'none' : 'table-row';
+
+        }
+
+        return {
+            init: function() {
+                var inputs = document.getElementsByClassName('light-table-filter');
+                var selects = document.getElementsByClassName('select-table-filter');
+                Arr.forEach.call(inputs, function(input) {
+                    input.oninput = _onInputEvent;
+                });
+                Arr.forEach.call(selects, function(select) {
+         select.onchange  = _onSelectEvent;
+                });
+            }
+        };
+    })(Array.prototype);
+
+    document.addEventListener('readystatechange', function() {
+        if (document.readyState === 'complete') {
+            LightTableFilter.init();
+        }
+    });
+
+})(document);
+
+
+   
+
+
+
+
+
+
 
 
 

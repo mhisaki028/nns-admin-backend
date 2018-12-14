@@ -30,6 +30,8 @@ class PatientController extends Controller
 
         $patients = $ref->getValue();
 
+        $c_patient = count($patients);
+
         
        
         foreach ($patients as $patient){
@@ -39,7 +41,7 @@ class PatientController extends Controller
 
     
 
-        return view ('patient', compact('all_patient'));
+        return view ('patient', compact('all_patient'), ['c_patient'=>$c_patient]);
     }
 
 

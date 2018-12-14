@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Medtech;
 use App\Lab;
+use App\Booking;
 
 class MedtechController extends Controller
 {
@@ -15,11 +16,14 @@ class MedtechController extends Controller
         $medtechs = DB::table('medtechs')
             ->join('laboratories', 'medtechs.lab_designation', '=', 'laboratories.lab_id')
             ->get(); 
-     
+        
 
         $labs = Lab::all();
+        $bookings = Booking::all();
+        $medtechs = Medtech::all();
+        $c_medtech = count($medtechs);
 
-        return view ('medtech',['medtechs'=>$medtechs, 'labs'=>$labs]);
+        return view ('medtech',['medtechs'=>$medtechs, 'labs'=>$labs, 'bookings'=>$bookings, 'c_medtech'=>$c_medtech]);
     }
 
      public function addMedtech(Request $request){
@@ -62,7 +66,10 @@ class MedtechController extends Controller
 
     	$labs = Lab::all();
 
-    	return view ('lclabmedtech', ['lc_medtechs'=>$lc_medtechs, 'labs'=>$labs]);
+        $c_lcmed = count($lc_medtechs);
+        $sortedLCmed = array_reverse(array_sort($lc_medtechs, SORT_DESC, 'created_at'));
+
+    	return view ('lclabmedtech', ['lc_medtechs'=>$lc_medtechs, 'labs'=>$labs, 'c_lcmed'=>$c_lcmed, 'sortedLCmed'=>$sortedLCmed]);
     }
 
     public function mmgmedtech(){
@@ -110,10 +117,9 @@ class MedtechController extends Controller
     }
 
     //Delete
-    public function deleteLCMedtech($medtech_id){
-    	Medtech::where('medtech_id', $medtech_id)
-	        ->delete();
+    public function deleteLCMedtech(Request $request){
+    	$lc_medtech = Medtech::findOrFail($request->medtech_id)->delete();
 
-	        return redirect('/lclabmedtech');
+        return back();
     }
 }

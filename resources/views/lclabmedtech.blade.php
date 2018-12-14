@@ -24,9 +24,18 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box" style="border-radius: 15px;">
+                            <h1>Medical Technologists </h1> 
+                            
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                       <div class="col-sm-4 col-sm 12">
-                        <div class="white-box">
+                        <div class="white-box" style="border-radius: 15px;">
                             <form method="POST" action="{{ url('/addLCMedtech') }}">
                                         {{ csrf_field() }}
                                         <div class="form-group">
@@ -51,44 +60,39 @@
                                                             </select> 
                                         </div>
                                         
-                                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Add Medtech</button>
+                                        <button type="submit" class="btn btn-default waves-effect waves-light m-r-10">Add Medtech</button>
                                         
                                     </form>
                         </div>
                     </div>
 
                     <div class="col-md-8 col-sm-12">
-                        <div class="white-box">
-                
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list color-table success-table" data-page-size="10">
+                          
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box" style="border-radius: 15px;">
+                            <h3>Total Medtechs: <span class="label label-success m-r-10">{{$c_lcmed}}</span></h3>
+                                <div class="text-right">
+                           
+                            <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
+                           
+                              </div>
+
+                                  <div class="table-responsive">
+                                    <table id="demo-foo-addrow" class="table table-hover manage-u-table order-table" data-page-size="10">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Contact Number</th>
-                                               <th>Assignment</th>
+                                                <th>Assignment</th>
                                                 <th>Time Available</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <div class="form-inline padding-bottom-15">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 text-right m-b-20">
-                                            <div class="form-group">
-                                                <input id="demo-input-search2" type="text" placeholder="Search" class="form-control" autocomplete="off"> </div>
-                                        </div>
-                                    </div>
-                                </div>
                                         <tbody>
-                                            @if(count($lc_medtechs)>0)
-                                                @foreach($lc_medtechs->all() as $lc_medtech)
 
-
-                                            
+                                           @if(count($sortedLCmed)>0)
+                                                @foreach($sortedLCmed as $lc_medtech)
                                             <tr>
                                                 <td> {{ $lc_medtech->medtech_name }}</td>
                                                 <td> {{ $lc_medtech->medtech_no }}</td>
@@ -96,26 +100,28 @@
                                                 <td> {{ $lc_medtech->time_avail }}</td>
                                             
                                                 <td>
-                                                    <a class="btn btn-default btn-outline m-r-5"  
-                                                    data-toggle="modal" data-target="#modal-editLCM"
+
+                                                     <button type="button" class="btn btn-info btn-outline btn-circle btn-lg m-r-5" data-toggle="modal" data-target="#modal-editLCM"
                                                     data-mtid="{{ $lc_medtech->medtech_id }}"
                                                     data-mtname="{{ $lc_medtech->medtech_name }}"
                                                     data-mtno="{{ $lc_medtech->medtech_no }}"
                                                     data-mtlab="{{ $lc_medtech->lab_designation }}"
-                                                    data-mttime="{{ $lc_medtech->time_avail }}"
-                                                    ><i class="ti-pencil-alt text-warning m-r-5"></i>Edit</a>
+                                                    data-mttime="{{ $lc_medtech->time_avail }}"><i class="ti-pencil-alt"></i></button>
                                                     
+                                                    <button type="button" class="btn btn-info btn-outline btn-circle btn-lg m-r-5" data-toggle="modal" data-target="#modal-delete" data-mid="{{$lc_medtech->medtech_id}}"><i class="ti-trash"></i></button>
+
+                                                  
                     
 
-                                                  <a href='{{ url("/deleteLCMedtech/{$lc_medtech->medtech_id}") }}' class="btn btn-default btn-outline m-r-5"><i class="icon-trash text-danger m-r-5"></i>Delete</a>
                                                 </td>
                                             </tr>
                                                 @endforeach
                                             @endif
+                                            
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                               
+                                            
                                                      <td colspan="7">
                                                     <div class="text-right">
                                                         <ul class="pagination"> </ul>
@@ -125,17 +131,37 @@
                                         </tfoot>
                                     </table>
                                 </div>
+
+                
                                      
                                                
                                                             
                                                            
-                                                        </div>
+                        </div>
+                    </div>
+                                             
+                </div>
+
                                                     </div>
                                                     <!-- /.modal-dialog -->
                                                 </div>
 
 
-                                                 <div id="modal-editLCM" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                                                
+                                            
+
+                    
+
+
+
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <!-- /.container-fluid -->
+
+ <div id="modal-editLCM" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
                                                     <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -178,22 +204,30 @@
                             </div>
                         </div>
                     </div>
-                    
-                
-                                                 </div>
-                                                        </div>
+ </div>
+</div>
 
-                                            
+<div id="modal-delete" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                         
+                                      <form action='{{url("/deleteLCMedtech")}}' method="POST">
+                                        {{ csrf_field() }}
+                                        <div class="modal-body">
+                                            <input type="hidden" id="medtech_id" name="medtech_id" value=""/>
+                                            <h4 class="modal-title" id="mySmallModalLabel">Are you sure you want to delete this record?</h4>
 
-                    
+                                           
+                                        </div>
+                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
+                                        </div>
+                                    </form>
+                                    </div>
 
 
-
-                        </div>
-                    </div>
-                </div>
-               
-            </div>
-            <!-- /.container-fluid -->
-
-        
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>

@@ -25,76 +25,51 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
-                <div class="row">
-                    <div class="col-sm-4 col-sm 12">
-                        <div class="white-box">
 
-                            <form method="POST" action="{{ url('/addPatient') }}">
-                                        {{ csrf_field() }}
-                                        <div class="form-group">
-                                            
-                                            <label for="name">Full Name</label>
-                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Full Name" required> </div>
-                                    
-                                        <div class="form-group">
-                                            <label for="contact_no">Contact Number</label>
-                                            <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter Contact Number" required> </div>
-                                        <div class="form-group">
-                                            <label for="email">Email Address</label>
-                                            <input type="email" class="form-control" id="email" name="email" placeholder="emailaddress@gmail.com" required> </div>
-                                    
-                                        <div class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required> </div>
-                                        
-                                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Submit</button>
-                                        <button type="button" data-dismiss="modal" class="btn btn-inverse waves-effect waves-light">Cancel</button>
-                                    </form>
+                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box" style="border-radius: 15px;">
+                            <h1>Registered Patients </h1> 
+                            
                         </div>
-
                     </div>
-                    <div class="col-md-8 col-sm-12">
-                        <div class="white-box">
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list color-table success-table" data-page-size="10">
+                </div>
+                <div class="row">
+                 
+                    <div class="col-md-12">
+                        <div class="white-box" style="border-radius: 15px;">
+                            <h3>Total Registered Patients: <span class="label label-success m-r-10">{{ $c_patient }}</span></h3>
+                            <div class="text-right">
+                           
+                            <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
+                           
+                              </div>
+
+                                  <div class="table-responsive">
+                                    <table id="demo-foo-addrow" class="table table-hover manage-u-table order-table" data-page-size="10">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Contact Number</th>
+                                                <th>Phone</th>
                                                 <th>Email Address</th>
                                                 <th>Password</th>
                                               
-                                            
                                             </tr>
                                         </thead>
-                                        <div class="form-inline padding-bottom-15">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 text-right m-b-20">
-                                            <div class="form-group">
-                                                <input id="demo-input-search2" type="text" placeholder="Search" class="form-control" autocomplete="off"> </div>
-                                        </div>
-                                    </div>
-                                </div>
                                         <tbody>
+
                                             @if(count($all_patient)>0)
                                                 @foreach($all_patient as $patient)
-
-
-                                            
                                             <tr>
-                                                <td> {{ $patient['name'] }}</td>
-                                                <td> {{ $patient['phone'] }}</td>
-                                                <td> {{ $patient['email'] }}</td>
-                                                <td> {{ $patient['password'] }}</td>
-                                   
-                                            
+                                                <td>{{$patient['name']}}</td>
+                                                <td>{{$patient['phone']}}</td>
+                                                <td>{{$patient['email']}}</td>
+                                                <td>{{$patient['password']}}</td>
+                                             
                                             </tr>
                                                 @endforeach
                                             @endif
+                                            
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -108,6 +83,7 @@
                                         </tfoot>
                                     </table>
                                 </div>
+
                             </div>
                         </div>  
                     </div>

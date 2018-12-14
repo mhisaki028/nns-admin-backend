@@ -10,9 +10,11 @@ class LabController extends Controller
 {
     public function index(){
     	$labs = User::where('admin', 0)->get();
+
+    	$c_lab = count($labs);
     
 
-        return view('lab', ['labs'=>$labs]); 
+        return view('lab', ['labs'=>$labs, 'c_lab'=>$c_lab]); 
     }
 
 

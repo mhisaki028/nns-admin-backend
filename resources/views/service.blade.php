@@ -24,56 +24,57 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box" style="border-radius: 15px;">
+                            <h1>Lab Services </h1> 
+                           
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
 
                     <div class="col-md-12">
-                        <div class="white-box">
+                        <div class="white-box" style="border-radius: 15px;">
                 
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list color-table success-table" data-page-size="10">
+                           <h3>Total Available Services: <span class="label label-success m-r-10">{{ $c_service }}</span></h3>
+                            <div class="text-right">
+                           
+                            <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
+                           
+                              </div>
+
+                                  <div class="table-responsive">
+                                    <table id="demo-foo-addrow" class="table table-hover manage-u-table order-table" data-page-size="10">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Description</th>
                                                 <th>Price</th>
-                                            
-                                
+                                              
                                             </tr>
                                         </thead>
-                                        <div class="form-inline padding-bottom-15">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 text-right m-b-20">
-                                            <div class="form-group">
-                                                <input id="demo-input-search2" type="text" placeholder="Search" class="form-control" autocomplete="off"> </div>
-                                        </div>
-                                    </div>
-                                </div>
                                         <tbody>
+
                                             @if(count($services)>0)
-                                                @foreach($services->all() as $service)
-
-
-                                            
+                                                @foreach($services as $service)
                                             <tr>
-                                                <td>{{ $service->service_id }}</td>
-                                                <td> {{ $service->service_name }}</td>
-                                                <td> {{ $service->service_desc }}</td>
-                                                <td> {{ $service->service_price }}</td>
+                                                <td>{{$service->service_id}}</td>
+                                                <td>{{$service->service_name}}</td>
+                                                <td>{{$service->service_desc}}</td>
+                                                <td>{{$service->service_price}}</td>
                                              
-                                            
-                                               
                                             </tr>
                                                 @endforeach
                                             @endif
+                                            
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                               
+                                            
                                                      <td colspan="7">
                                                     <div class="text-right">
                                                         <ul class="pagination"> </ul>
@@ -83,7 +84,6 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                     
                                                
                                                             
                                                            

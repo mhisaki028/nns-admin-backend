@@ -23,43 +23,45 @@
 
                     <!-- /.col-lg-12 -->
                 </div>
+                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box" style="border-radius: 15px;">
+                            <h1>Medical Laboratories </h1> 
+                            
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="white-box">
-                        
+                        <div class="white-box" style="border-radius: 15px;">
+                         <h3>Total Available Labs: <span class="label label-success m-r-10">{{ $c_lab }}</span></h3>
+                            <div class="text-right">
+                           
+                            <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
+                           
+                              </div>
                             <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list color-table success-table" data-page-size="10">
+                               <table id="demo-foo-addrow" class="table table-hover manage-u-table order-table" data-page-size="10">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Email</th>
+                                                <th>Email Address</th>
                                                 <th>Action</th>
+                                              
                                             </tr>
                                         </thead>
-                                <div class="form-inline padding-bottom-15">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 text-right m-b-20">
-                                            <div class="form-group">
-                                                <input id="demo-input-search2" type="text" placeholder="Search" class="form-control" autocomplete="off"> </div>
-                                        </div>
-                                    </div>
-                                </div>
                                         <tbody>
-                                            @if(count($labs)>0)
-                                                @foreach($labs->all() as $lab)
 
-                                                
+                                            @if(count($labs)>0)
+                                                @foreach($labs as $lab)
                                             <tr>
-                                                <td> {{ $lab->id }}</td>
-                                                <td> {{ $lab->name }}</td>
-                                                <td> {{ $lab->email }}</td>
+                                                <td>{{$lab->id}}</td>
+                                                <td>{{$lab->name}}</td>
+                                                <td>{{$lab->email}}</td>
                                                 <td>
-                                                    <a class="btn btn-default btn-outline m-r-5" 
+
+                                                     <a class="btn btn-default btn-outline m-r-5" 
                                                     id="edit-admin"
                                                     data-toggle="modal"
                                                     data-target="#modal-editL"
@@ -70,11 +72,13 @@
                                                     
                                                         <a href='{{ url("/deleteLab/{$lab->id}") }}' class="btn btn-default btn-outline m-r-5"
                                                         ><i class="icon-trash text-danger m-r-5"></i>Delete</a>
-                                                   
+                                                    
                                                 </td>
+                                             
                                             </tr>
                                                 @endforeach
                                             @endif
+                                            
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -100,7 +104,24 @@
                                                         
                                                     </script>
                                                 </td>
-                                                <div id="modal-editL" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                              
+                                            
+                                                     <td colspan="7">
+                                                    <div class="text-right">
+                                                        <ul class="pagination"> </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        
+          <div id="modal-editL" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -131,22 +152,4 @@
                                                     </div>
                                                     <!-- /.modal-dialog -->
                                                 </div>
-
-                                              
-
-                                                <td colspan="7">
-                                                    <div class="text-right">
-                                                        <ul class="pagination"> </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-               
-            </div>
-            <!-- /.container-fluid -->
             

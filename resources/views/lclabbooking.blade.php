@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="col-sm-4 col-sm-12">
-                    <div class="white-box">
+                    <div class="white-box" style="border-radius: 15px;">
                          <form method="POST" action="{{ url('/addLCBooking') }}" class="no-bg-addmon">
                                         {{ csrf_field() }}
                                       
@@ -59,10 +59,7 @@
                                                    
                                                             <input type="text" class="form-control" placeholder="Enter Date (dd/mm/yyyy)" id="date" name="date" required> 
                                                     </div>
-                                                
-                                    
-
-                                             
+           
                                               
                                                    
                                                
@@ -108,11 +105,16 @@
                                                      
                                                             <input type="text" class="form-control" placeholder="Enter Complete Home/Work address" id="address" name="address" required>
                                                     </div>
+
+                                                     <div class="form-group">
+                                                     
+                                                            <input type="text" class="form-control" placeholder="Enter Patient Phone Number" id="phone" name="phone" required>
+                                                    </div>
                                               
                                     
                                             
             
-                                                            <button type="submit" class="btn btn-success">Book</button>
+                                                            <button type="submit" class="btn btn-default">Book</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -123,152 +125,121 @@
 
 
             <div class="col-md-8 col-sm-12">
-                <div class="white-box">
+
+                <div class="white-box" style="border-radius: 15px;">
                   
-                                    <div class="table-responsive">
-                                        <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list color-table success-table" data-page-size="7">
-                                            <thead>
+                        <h3>Total Booking Requests: <span class="label label-success m-r-10">{{ $c_lcbook }}</span></h3>
+
+                         <h5>
+                            Pending: <span class="label label-inverse">{{ $c_pending }}</span> 
+                            Processing:  <span class="label label-inverse">{{ $c_processing }}</span>
+                            Delivered:  <span class="label label-inverse">{{ $c_delivered }}</span> 
+                            Completed:  <span class="label label-inverse">{{ $c_completed }}</span>
+                        </h5>
+                         
+                          
+                             <div class="text-right">
+                           
+                            <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
+                            <select type="search" class="select-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
+                                    <option value="">All</option> 
+                                    <option value="PENDING">PENDING</option> 
+                                    <option value="CONFIRMED">CONFIRMED</option>
+                                    <option value="PROCESSING">PROCESSING</option>  
+                                    <option value="DELIVERED">DELIVERED</option>
+                                    <option value="COMPLETED">COMPLETED</option>
+                                   
+                                
+                                  </select>
+                              </div>
+
+
+                                  <div class="table-responsive">
+                                    <table id="demo-foo-addrow" class="table table-hover manage-u-table order-table" data-page-size="10">
+                                        <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>No</th>
                                                 <th>Status</th>
                                                 <th>Payment</th>
                                                 <th>Action</th>
+                                              
                                             </tr>
-                                            </thead>
-                                            <div class="form-inline padding-bottom-15">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <div class="form-group">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 text-right m-b-20">
-                                                        <div class="form-group">
-                                                            <input id="demo-input-search2" type="text" placeholder="Search" class="form-control" autocomplete="off"> </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <tbody>
-                                                @if(count($lc_bookings)>0)
-                                                    @foreach($lc_bookings as $lc_booking)
+                                        </thead>
+                                        <tbody>
+
+                                           @if(count($sortedLCbook)>0)
+                                                    @foreach($sortedLCbook as $lc_booking)
                                                         
                                                 
                                                     <tr>
                                                         <td>{{ $lc_booking->id }}</td>
                                                         <td>{{ $lc_booking->request_no}}</td>
-                                                        <td> {{ $lc_booking->status }} </td>
-                                                        <td> {{ $lc_booking->payment }}</td>
-                                                        <td>
-                                                            <a href='{{ url("/sendNotification/{$fcm_users->Token}/{$message}") }}' class="btn btn-default btn-outline m-r-5"><i class="ti-search text-inverse m-r-5"></i>View</a>
+                                                     
 
-    
-                                                            <a href='{{ url("/deleteLCBook/{$lc_booking->id}") }}'' class="btn btn-default btn-outline m-r-5"><i class="icon-trash text-danger m-r-5"></i>Delete</a>
+                                                
+                                                <td><span class="status">{{$lc_booking->status}}</span></td>
+                                              
+                                                <td><span class="pay">{{$lc_booking->payment}}</span></td>
+                                                <script>
+                                                 $('.pay').each(function() {
+                                                     if ($(this).text() == 'PAID') {
+                                                        $(this).addClass('label label-success');
+                                                    }
+                                                    else if ($(this).text() == 'UNPAID') {
+                                                     $(this).addClass('label label-danger');
+                                                    }
+                                                    }); 
+                                                </script>
+
+                                                <td>
+                                                    <button id="bookDetails" data-toggle="modal" data-target="#modal-view" data-id="{{$lc_booking->id}}" data-rno="{{$lc_booking->request_no}}" data-pname="{{$lc_booking->patient_name}}" data-padd="{{$lc_booking->patient_address}}" data-pno="{{$lc_booking->patient_phone}}" data-serv="{{$lc_booking->service}}" data-total="{{$lc_booking->totalfee}}" data-med="{{$lc_booking->medtech}}" data-stat="{{$lc_booking->status}}" data-pay="{{$lc_booking->payment}}" class="btn btn-default">View</button>
 
                                                             @if($lc_booking->status == 'PENDING')
 
                                                          
-                                                             <a href='{{ url("/confirm/{$lc_booking->id}") }}''><button id="confirmButton" onclick="" class="btn btn-success m-r-5">Confirm</button></a>
+                                                             <button data-toggle="modal" data-target="#modal-confirm" data-id="{{$lc_booking->id}}" id="confirmButton" onclick="" class="btn btn-default">Confirm</button>
 
                                                            
 
                                                             @elseif($lc_booking->status == 'CONFIRMED') 
 
 
-                                                            <button id="processButton" data-toggle="modal" data-target="#modal-process" data-id="{{ $lc_booking->id }}" data-time="{{ $lc_booking->time }}" data-no="{{ $lc_booking->request_no }}" data-patient="{{ $lc_booking->patient_name }}" class="btn btn-warning m-r-5">Process</button>
+                                                            <a href='{{url("/process/{$lc_booking->id}")}}'><button class="btn btn-default">Process</button></a>
 
                                                         
                                                            
                                                             @elseif($lc_booking->status =='PROCESSING')
 
-                                                             <button id="deliverButton" data-toggle="modal" data-target="#modal-deliver" data-id="{{ $lc_booking->id }}" data-payment="{{ $lc_booking->payment }}" data-no="{{ $lc_booking->request_no }}" data-total="{{ $lc_booking->totalfee }}" data-ass_medtech="{{ $lc_booking->medtech }}" data-patient="{{ $lc_booking->patient_name }}" class="btn btn-info m-r-5">Deliver</button>
+                                                             <button id="deliverButton" data-toggle="modal" data-target="#modal-deliver" data-id="{{ $lc_booking->id }}" data-payment="{{ $lc_booking->payment }}" data-no="{{ $lc_booking->request_no }}" data-total="{{ $lc_booking->totalfee }}" data-ass_medtech="{{ $lc_booking->medtech }}" data-patient="{{ $lc_booking->patient_name }}" class="btn btn-default">Deliver</button>
+
+                                                             @elseif($lc_booking->payment == 'UNPAID' && $lc_booking->status == 'DELIVERED')
+                                                             <button id="deliverButton" data-toggle="modal" data-target="#modal-deliver" data-id="{{ $lc_booking->id }}" data-payment="{{ $lc_booking->payment }}" data-no="{{ $lc_booking->request_no }}" data-total="{{ $lc_booking->totalfee }}" data-ass_medtech="{{ $lc_booking->medtech }}" data-patient="{{ $lc_booking->patient_name }}" class="btn btn-default">Deliver</button>
+
                                                              
 
                                                          
 
-                                                            @elseif($lc_booking->status == 'DELIVERED')
+                                                            @elseif($lc_booking->payment == 'PAID' && $lc_booking->status == 'DELIVERED')
+                                                             <a href='{{ url("/upload/{$lc_booking->id}") }}'><button id="uploadButton" class="btn btn-default">Upload</button></a>
 
-                                                            <label id="selectfile" class="btn btn-default btn-outline m-r-5">
-                                                                Lab Test Result
-                                                            <input type="file" onchange="showButton(event)" class="upload-group" id="file" style="width: 0.1px;height: 0.1px;position: absolute;z-index: -1">
-                                                            </label>
-                                                            <button type="button" onclick="uploadFile(event)" class="btn btn-success m-r-5">Upload Result</button>
+                                                          
 
-                                                            @endif
-                                                            
-
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                      <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-
-                                                <script>
-                                                    //Initialize Firebase
-                                                    var config = {
-                                                        apiKey: "AIzaSyD2eTvpZDkoytuO7lrIF5VvwfWjalbCRTc",
-                                                        authDomain: "androidpatientapp.firebaseapp.com",
-                                                        databaseURL: "https://androidpatientapp.firebaseio.com",
-                                                
-                                                        storageBucket: "androidpatientapp.appspot.com",
-
-                                                    };
-                                                    firebase.initializeApp(config);
-
-                                            
-
-                                                    function showButton(){
-                                                        $("#uploadButton").show();
-                                                        $("#selectfile").hide();
-                                                        selectedFile = event.target.files[0];
                                                         
-                                                    }
 
-                                                    function uploadFile(){
-                                                        var filename = selectedFile.name;
-                                                        var storageRef = firebase.storage().ref('/labtest_results/' + filename);
-                                                        var uploadTask = storageRef.put(selectedFile);
-                                                        
-                                                        uploadTask.on('state_changed', function(snapshot){
-
-                                                        }, function (error){
-
-                                                        }, function(){
-                                                            var resultKey = firebase.database().ref('Results/').push().key;
-                                                              var downloadURL = uploadTask.snapshot.downloadURL;
-                                                              var updates = {};
-                                                              var resultData = {
-                                                                url:downloadURL
-                                                              };
-                                                              updates['/Results/'+resultKey] = resultData;
-                                                              firebase.database().ref().update(updates);
-                                                                   
-                                                        }); 
-
-                                                     
-
-
-
-                                                    }
-
-
-
-  
-                                                    
-                                                </script>
-                                                        
-                                                        
-                                                        </td>
-                                                    </tr>
-
-                                              
-                                               
-                                            @endforeach
-                                            
+                                                             @elseif($lc_booking->status == 'COMPLETED')
+                                                            <a href='{{ url("/invoice/{$lc_booking->id}") }}'><button class="btn btn-default">Invoice</button></a>
+                                                             @endif
+                                                </td>
+                                             
+                                            </tr>
+                                                @endforeach
                                             @endif
-                                            </tbody>
-                                            <tfoot>
-                                           <tr>
+                                            
+                                           
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
                                             
                                                      <td colspan="7">
                                                     <div class="text-right">
@@ -276,12 +247,12 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                    <!-- row -->
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+            </div>
+               
                 
           
         </div>
@@ -293,7 +264,7 @@
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                          <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                                   
                                             <h4 class="modal-title">Lab Test Delivered</h4> </div>
                                         <div class="modal-body">
 
@@ -336,7 +307,7 @@
 
 
                                              <div class="modal-footer">
-                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Delivered but Not Paid</button>
+                                            <a href="{{url('/deliverunpaid')}}"><button class="btn btn-default waves-effect">Delivered but Not Paid</button></a>
                                             <button type="submit" class="btn btn-info waves-effect waves-light">Delivered and Paid</button>
                                             </div>
 
@@ -350,149 +321,106 @@
                             </div>
                         </div>
 
- <div id="modal-process" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+
+
+<div id="modal-confirm" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                         
+                                      <form action="{{url('/confirm')}}" method="POST">
+                                        {{ csrf_field() }}
+                                        <div class="modal-body">
+                                            <input type="hidden" id="id" name="id" value=""/>
+                                             <h4 class="modal-title" id="mySmallModalLabel">Confirm Booking?</h4>
+
+
+                                           
+
+                                           
+
+                                           
+                                        </div>
+                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-inverse waves-effect waves-light">Confirm</button>
+                                        </div>
+                                    </form>
+                                    </div>
+
+
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+
+
+
+<div id="modal-view" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                                            <h4 class="modal-title">For Processing</h4> </div>
+                                         <div class="modal-header">
+                                          
+                                            <h4 class="modal-title">Booking Details</h4> </div>
                                         <div class="modal-body">
-
-                                                    
-                                                 <label class="control-label">Req. No.</label>
-                                                    <input style="border: none;background-color: #FFF;font-weight: bold"id="request_no" name="request_no" value="" disabled/>
+                                            <input type="hidden" id="id" name="id" value="" disabled/>
+                                           
+                                             <label class="control-label">Request #:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold" id="request_no" name="request_no" value="" disabled/>
                                                     <br>
+                                               
 
-                                                    <label class="control-label">Patient Name</label>
-                                                    <input style="border: none;background-color: #FFF;font-weight: bold"id="patient_name" name="patient_name" value="" disabled/>
+                                                    <label class="control-label">Patient Name:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold" id="patient_name" name="patient_name" value="" disabled/>
                                                     <br>
-                                                <label class="control-label">Scheduled Time:</label>
-                                                    <input style="border: none;background-color: #FFF;font-weight: bold"name="time" id="time" value="" disabled/>
-                                        <hr>
-                      
-                                            <form method="POST" action='{{ url("/assignMedtech") }}'>
                                             
-                                            {{ csrf_field() }}
-                                             <input type="hidden" id="id" name="id" value=""/>
-                                                <div class="form-group">
-                                                     <h4 class="modal-title">
+                                                    <label class="control-label">Patient Address:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="patient_address" id="patient_address" value="" disabled/>
+                                                    <br>
 
-                                                    
-                                                    <label for="recipient-name" class="control-label">Choose Medtech:</label>
-                                                    <input style="border-radius: 5px; padding-left: 10px " name="chosen_medtech" id="chosen_medtech" placeholder="Enter Medtech Name"/>
-                                                </h4>
+                                                     <label class="control-label">Patient Phone:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="patient_phone" id="patient_phone" value="" disabled/>
+                                                    <br>
 
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                    @if($lc_booking->time = "8:00 - 9:00")
-                                                    <h4><span class="label label-info label-rouded">8:00 - 9:00 AM</span></h4>
-                                                   <select class="form-control" id="medtech" name="medtech">
-                                                           
-                                                        @foreach($medtechs_eight->all() as $medtech_eight)
-                                                            <option value="{{ $medtech_eight->medtech_id}}">{{ $medtech_eight->medtech_name }} {{ $medtech_eight->assignment }}</option>
-                                                         @endforeach
-                                                    <
-                                                    </select>
-                                                   @endif
-                                               </div>
-                                                    <div class="col-md-6">
-                                                   <h4><span class="label label-info label-rouded">1:00 - 2:00 PM</span></h4>
-                                                     @if($lc_booking->time = "1:00 - 2:00")
-                                                    <select class="form-control" id="medtech" name="medtech">
-                                                          
-                                                        @foreach($medtechs_one->all() as $medtech_one)
-                                                            <option value="{{ $medtech_one->medtech_id}}">{{ $medtech_one->medtech_name }} {{ $medtech_one->assignment }}</option>
-                                                         @endforeach
-                                                     
-                                                    </select>
-                                                    @endif
-                                                </div>
-                                                </div>
+                                                    <label class="control-label">Service Availed:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="service" id="service" value="" disabled/>
+                                                    <br>
+                                              
+                                                    <label class="control-label">Total Fee:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="total" id="total" value="" disabled/>
+                                                    <br>
 
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                    <h4><span class="label label-info label-rouded">9:00 - 10:00 AM</span></h4>
-                                                    @if($lc_booking->time = "9:00 - 10:00")  
-                                                    <select class="form-control" id="medtech" name="medtech">
+                                            
+                                                    <label class="control-label">Medtech Assigned:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="medtech" id="medtech" value="" disabled/>
+                                                    <br>
 
-                                                        
-                                                        @foreach($medtechs_nine->all() as $medtech_nine)
-                                                            <option value="{{ $medtech_nine->medtech_id}}">{{ $medtech_nine->medtech_name }} {{ $medtech_nine->assignment }}</option>
-                                                         @endforeach
-                                                   
-                                                    </select>
-                                                     @endif
-                                                 </div>
-                                                    <div class="col-md-6">
-                                                      <h4><span class="label label-info label-rouded">2:00 - 3:00 PM</span></h4>
-                                                    @if($lc_booking->time = "2:00 - 3:00")  
-                                                    <select class="form-control" id="medtech" name="medtech">
-                                                         
-                                                        @foreach($medtechs_two->all() as $medtech_two)
-                                                            <option value="{{ $medtech_two->medtech_id}}">{{ $medtech_two->medtech_name }} {{ $medtech_two->assignment }}</option>
-                                                         @endforeach
-                                                   
-                                                    </select>
-                                                    @endif
-                                                </div>
-                                                </div>
+                                                     <label class="control-label">Status:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="status" id="status" value="" disabled/>
+                                                    <br>
 
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                      <h4><span class="label label-info label-rouded">10:00 - 11:00 AM</span></h4>
-                                                       @if($lc_booking->time = "10:00 - 11:00")  
-                                                    <select class="form-control" id="medtech" name="medtech">
-                                                       
-                                                        @foreach($medtechs_ten->all() as $medtech_ten)
-                                                            <option value="{{ $medtech_ten->medtech_id}}">{{ $medtech_ten->medtech_name }} {{ $medtech_ten->assignment}}
-                                                         </option>
-                                                         @endforeach
-                                                   
-                                                    </select>
-                                                    @endif
-                                                </div>
-                                                    <div class="col-md-6">
-                                                     <h4><span class="label label-info label-rouded">3:00 - 4:00 PM</span></h4>
-                                                      @if($lc_booking->time = "3:00 - 4:00") 
-                                                    <select class="form-control" id="medtech" name="medtech">
-                                                         
-                                                        @foreach($medtechs_three->all() as $medtech_three)
-                                                            <option value="{{ $medtech_three->medtech_id}}">{{ $medtech_three->medtech_name }} {{ $medtech_three->assignment }}</option>
-                                                         @endforeach
-                                                   
-                                                    </select>
-                                                     @endif
-                                                 </div>
-                                                 </div>
+                                                     <label class="control-label">Payment Status:</label>
+                                                    <input style="border: none;background-color: #FFF;font-weight: bold;" name="payment" id="payment" value="" disabled/>
 
-                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                     <h4><span class="label label-info label-rouded">11:00 - 12:00 AM</span></h4>
-                                                      @if($lc_booking->time = "11:00 - 12:00") 
-                                                    <select class="form-control" id="medtech" name="medtech">
-                                                         
-                                                        @foreach($medtechs_eleven->all() as $medtech_eleven)
-                                                            <option value="{{ $medtech_eleven->medtech_id}}">{{ $medtech_eleven->medtech_name }} {{ $medtech_eleven->assignment }}</option>
-                                                         @endforeach
-                                                   
-                                                    </select>
-                                                   @endif
-                                               </div>
-                                                    </div>
+
+                           
+                                        </div>
 
 
 
-                                            <div class="modal-footer">
-                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-warning waves-effect waves-light">Assign Medtech</button>
+                                             <div class="modal-footer">
+                                           <button class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                           
                                             </div>
 
-                                                     
-                                              
                                             </form>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div> 
 
+                                   
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        </div>
+
+ 
