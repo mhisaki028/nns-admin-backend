@@ -61,17 +61,16 @@
                                                 <td>{{$lab->email}}</td>
                                                 <td>
 
-                                                     <a class="btn btn-default btn-outline m-r-5" 
-                                                    id="edit-admin"
-                                                    data-toggle="modal"
-                                                    data-target="#modal-editL"
+                                                     <button type="button" class="btn btn-info btn-outline btn-circle btn-lg m-r-5" data-toggle="modal" data-target="#modal-editL"
                                                     data-lid="{{ $lab->id }}"
                                                     data-lname="{{ $lab->name }}"
-                                                    data-lemail="{{ $lab->email }}"
-                                                    ><i class="ti-pencil-alt text-warning m-r-5"></i>Edit</a>
+                                                    data-lemail="{{ $lab->email }}"><i class="ti-pencil-alt"></i></button>
                                                     
-                                                        <a href='{{ url("/deleteLab/{$lab->id}") }}' class="btn btn-default btn-outline m-r-5"
-                                                        ><i class="icon-trash text-danger m-r-5"></i>Delete</a>
+                                                    <button type="button" class="btn btn-info btn-outline btn-circle btn-lg m-r-5" data-toggle="modal" data-target="#modal-deletelab" data-lid="{{$lab->id}}"><i class="ti-trash"></i></button>
+
+                                                
+                                                    
+                                                    
                                                     
                                                 </td>
                                              
@@ -152,4 +151,28 @@
                                                     </div>
                                                     <!-- /.modal-dialog -->
                                                 </div>
-            
+
+<div id="modal-deletelab" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                         
+                                      <form action='{{url("/deleteLab")}}' method="POST">
+                                        {{ csrf_field() }}
+                                        <div class="modal-body">
+                                            <input type="hidden" id="lab_id" name="lab_id" value=""/>
+                                            <h4 class="modal-title" id="mySmallModalLabel">Are you sure you want to delete this record?</h4>
+
+                                           
+                                        </div>
+                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">No</button>
+                                            <button type="submit" class="btn btn-danger waves-effect waves-light">Yes</button>
+                                        </div>
+                                    </form>
+                                    </div>
+
+
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>

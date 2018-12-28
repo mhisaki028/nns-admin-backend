@@ -61,10 +61,11 @@
                                     <table id="demo-foo-addrow" class="table table-hover manage-u-table order-table" data-page-size="10">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                            
                                                 <th>Name</th>
                                                 <th>Phone</th>
                                                 <th>Assignment</th>
+                                                <th>Status</th>
                                                 <th>Time Available</th>
                                                 <th>Lab Designation</th>
                                             </tr>
@@ -74,10 +75,11 @@
                                             @if(count($medtechs)>0)
                                                 @foreach($medtechs->all() as $medtech)
                                             <tr>
-                                                <td>{{$medtech->medtech_id}}</td>
+                                        
                                                 <td>{{$medtech->medtech_name}}</td>
                                                 <td>{{$medtech->medtech_no}}</td>
                                                 <td>{{$medtech->assignment}}</td>
+                                                <td></td>
                                                 <td>{{$medtech->time_avail}}</td>
                                                 <td>{{$medtech->lab_designation}}</td>
                                             </tr>

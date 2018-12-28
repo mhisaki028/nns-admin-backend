@@ -10,29 +10,24 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function (){
-    return view('auth/login');
+
+Route::get('/', function () {
+    return view('welcome');
 });
 
-Auth::routes();
-
+Auth::routes(['verify' => true]);
 
 Route::post('/login', [
-	'uses' => 'LoginController@login', 
+	'uses' => 'Auth\LoginController@login', 
 	'as' => 'login'
 ]);
 
-Route::group(['middleware' => 'auth'], function(){
-	Route::get('/home', function(){
-		return view ('home');
-	})->name('home');
+Route::get('/labhome', 'HomeController@index')->name('labhome')
+	->middleware('verified');
 
-	Route::get('/lclabhome', 'ViewsController@lclabhome')->name('lclabhome');
+Route::get('/admin', 'HomeController@admin')->middleware('admin');
 
-	Route::get('/mmglabhome', 'ViewsController@mmglabhome')->name('mmglabhome');
 
-	Route::get('/ludacslabhome', 'ViewsController@ludacslabhome')->name('ludacslabhome');
-});
 
 
 //Admin
@@ -52,41 +47,59 @@ Route::get('/deleteMedtech/{medtech_id}', 'MedtechController@deleteMedtech')->na
 Route::get('/deleteBook/{id}', 'BookingController@deleteBook')->name('deleteBook');
 
 
-Route::get('/home', 'ViewsController@home')->name('home');
 Route::get('/logoutR', 'ViewsController@logoutR')->name('logoutR');
 
 
 Route::post('/addPatient', 'PatientController@addPatient');
 
 Route::post('/addBooking', 'BookingController@addBooking');
-Route::get('/deleteLab/{id}', 'LabController@deleteLab');
+Route::post('/deleteLab', 'LabController@deleteLab');
 
 
 
-
-//LC
-Route::get('/lclabmedtech', 'MedtechController@lcmedtech')->name('lclabmedtech');
+Route::get('/labmedtech', 'MedtechController@lcmedtech')->name('labmedtech');
 Route::post('/addLCMedtech', 'MedtechController@addLCMedtech');
 Route::post('/editLCMedtech', 'MedtechController@editLCMedtech');
 Route::post('/deleteLCMedtech', 'MedtechController@deleteLCMedtech');
 
-Route::get('/lclabbooking', 'BookingController@lcbooking')->name('lcbooking');
+Route::get('/labbooking', 'BookingController@lcbooking')->name('labbooking');
 Route::post('/addLCBooking', 'BookingController@addLCBooking');
 
 
-Route::post('/confirm', 'BookingController@confirm');
+Route::get('/confirm/{id}', 'BookingController@confirm');
+Route::get('/cancel/{id}', 'BookingController@cancel');
 Route::post('/assignMedtech', 'BookingController@assignMedtech');
 Route::post('/deliver', 'BookingController@deliver');
 Route::get('/deliverunpaid', 'BookingController@deliverunpaid');
 Route::get('/invoice/{id}', 'BookingController@showInvoice');
-Route::get('/process/{id}', 'BookingController@showProcess');
-Route::get('/upload/{id}','BookingController@showUpload');
+
+
 Route::get('/complete/{id}', 'BookingController@complete');
 
-Route::get('/lclabservices', 'ServiceController@lcService')->name('lcservice');
+Route::get('/labservices', 'ServiceController@lcService')->name('labservice');
 Route::post('/addLCService', 'ServiceController@addLCService')->name('addLCService');
 Route::post('/editLCService', 'ServiceController@editLCService')->name('editLCService');
 Route::post('/deleteLCService', 'ServiceController@deleteLCService')->name('deleteService');
+
+Route::get('/pages/bookdetails/{id}', 'BookingController@bookdetails');
+Route::get('/pages/details/{id}', 'BookingController@details');
+Route::get('/pages/rebook/{id}', 'BookingController@rebook');
+Route::get('/pages/process/{id}', 'BookingController@showProcess');
+Route::get('/pages/deliver/{id}', 'BookingController@showPay');
+Route::get('/pages/upload/{id}','BookingController@showUpload');
+Route::get('/pages/pending', 'BookingController@showPending');
+Route::get('/pages/processing', 'BookingController@showProc');
+Route::get('/pages/delv', 'BookingController@showDelv');
+Route::get('/pages/comp', 'BookingController@showComp');
+Route::get('/pages/canc', 'BookingController@showCanc');
+
+Route::get('/adminp/comp', 'BookingController@adminpComp');
+Route::get('/adminp/cancel', 'BookingController@adminpCanc');
+Route::get('/adminp/pending', 'BookingController@adminpPend');
+
+
+Route::get('/labearnings', 'SaleController@sales');
+
 
 
 

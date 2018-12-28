@@ -23,7 +23,7 @@ class ServiceController extends Controller
         $c_service = count($lc_services);
 
 
-        return view ('lclabservices',['lc_services'=>$lc_services, 'c_service'=>$c_service]);
+        return view ('labservices',['lc_services'=>$lc_services, 'c_service'=>$c_service]);
     }
 
     public function addLCService(Request $request){

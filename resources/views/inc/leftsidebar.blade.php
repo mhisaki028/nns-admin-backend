@@ -8,7 +8,7 @@
                     </li><br><br>   
                     
 
-                    <li><a href="{{ url('/home')}}" class="waves-effect"><span class="hide-menu"> Dashboard <span class="fa arrow"></span> <span class="label label-rouded label-inverse pull-right"></span></span></a>
+                    <li><a href="{{ url('/admin')}}" class="waves-effect"><span class="hide-menu"> Dashboard <span class="fa arrow"></span> <span class="label label-rouded label-inverse pull-right"></span></span></a>
                     </li>
 
                     <li> <a href="javascript:void(0)" class="waves-effect"></i><span class="hide-menu"> View <span class="fa arrow"></span> </span></a>

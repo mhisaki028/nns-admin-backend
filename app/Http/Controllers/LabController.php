@@ -9,7 +9,7 @@ use App\User;
 class LabController extends Controller
 {
     public function index(){
-    	$labs = User::where('admin', 0)->get();
+    	$labs = User::where('isAdmin', 0)->get();
 
     	$c_lab = count($labs);
     
@@ -18,9 +18,10 @@ class LabController extends Controller
     }
 
 
-    public function deleteLab($id){
+    public function deleteLab(Request $request){
 
-
+        $id = $request->get('lab_id');
+        
 	    	User::where('id', $id)
 	        ->delete();
 

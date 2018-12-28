@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Auth;
 use Carbon\Carbon;
+use App\User;
+use App\Sale;
 use App\Booking;
 use App\Lab;
 use App\Service;
@@ -25,11 +28,15 @@ class BookingController extends Controller
         $processing = Booking::where('status', 'PROCESSING')->get();
         $delivered = Booking::where('status', 'DELIVERED')->get();
         $completed = Booking::where('status', 'COMPLETED')->get();
+        $confirmed = Booking::where('status', 'CONFIRMED')->get();
+        $cancel = Booking::where('status', 'CANCELLED')->get();
 
         $c_pending = count($pending);
         $c_processing = count($processing);
         $c_delivered = count($delivered);
         $c_completed = count($completed);
+        $c_conf = count($confirmed);
+        $c_cancel = count($cancel);
 
 
         $pendingBooks = array_reverse(array_sort($pending, SORT_DESC, 'created_at'));
@@ -42,14 +49,18 @@ class BookingController extends Controller
 
 
 
-        return view('booking', ['bookings'=>$bookings,'labs'=>$labs, 'services'=>$services, 'c_booking'=>$c_booking, 'sortedBookings'=>$sortedBookings, 'c_pending'=>$c_pending, 'c_processing'=>$c_processing, 'c_delivered'=>$c_delivered, 'c_completed'=>$c_completed]);
+        return view('booking', ['bookings'=>$bookings,'labs'=>$labs, 'services'=>$services, 'c_booking'=>$c_booking, 'sortedBookings'=>$sortedBookings, 'c_pending'=>$c_pending, 'c_processing'=>$c_processing, 'c_delivered'=>$c_delivered, 'c_completed'=>$c_completed, 'c_conf'=>$c_conf, 'c_cancel'=>$c_cancel]);
     }
 
     
 
     //LC Booking
     public function lcbooking(){
-        $lc_bookings = Booking::where('lab',1)->get();
+
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
+
+        $lc_bookings = Booking::where('lab',$labid)->get();
         $labs = Lab::all();
         $services = Service::all();
         $lc_medtechs = Medtech::where('lab_designation',1)->get();
@@ -58,6 +69,12 @@ class BookingController extends Controller
         $processing = Booking::where('status', 'PROCESSING')->get();
         $delivered = Booking::where('status', 'DELIVERED')->get();
         $completed = Booking::where('status', 'COMPLETED')->get();
+
+        $confirmed = Booking::where('status', 'CONFIRMED')->get();
+        $cancel = Booking::where('status', 'CANCELLED')->get();
+
+        $c_conf = count($confirmed);
+        $c_cancel = count($cancel);
 
         $c_lcbook = count($lc_bookings);
         $c_pending = count($pending);
@@ -68,41 +85,10 @@ class BookingController extends Controller
         $sortedLCbook = array_reverse(array_sort($lc_bookings, SORT_DESC, 'created_at'));
    
 
-     
-        $eight = '8:00 - 9:00';
-        $nine = '9:00 - 10:00';
-        $ten = '10:00 - 11:00';
-        $eleven = '11:00 - 12:00';
-        $one = '1:00 - 2:00';
-        $two = '2:00 - 3:00';
-        $three = '3:00 - 4:00';
-
-        $medtechs_eight = Medtech::where('time_avail',$eight)->where('lab_designation',1)
-        ->get();
-
-         $medtechs_nine = Medtech::where('time_avail',$nine)->where('lab_designation',1)
-        ->get();
-
-         $medtechs_ten = Medtech::where('time_avail',$ten)->where('lab_designation',1)
-        ->get();
-
-         $medtechs_eleven = Medtech::where('time_avail',$eleven)->where('lab_designation',1)
-        ->get();
-
-         $medtechs_one = Medtech::where('time_avail',$one)->where('lab_designation',1)
-        ->get();
-
-         $medtechs_two = Medtech::where('time_avail',$two)->where('lab_designation',1)
-        ->get();
-
-         $medtechs_three = Medtech::where('time_avail',$three)->where('lab_designation',1)
-        ->get();
+    
 
 
-return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'services'=>$services,
-'medtechs_eight'=>$medtechs_eight, 'medtechs_nine'=>$medtechs_nine, 'medtechs_ten'=>$medtechs_ten, 
-'medtechs_eleven'=>$medtechs_eleven, 'medtechs_one'=>$medtechs_one, 'medtechs_two'=>$medtechs_two, 
-'medtechs_three'=>$medtechs_three, 'lc_medtechs'=>$lc_medtechs, 'c_pending'=>$c_pending, 'c_processing'=>$c_processing, 'c_delivered'=>$c_delivered, 'c_completed'=>$c_completed, 'c_lcbook'=>$c_lcbook, 'sortedLCbook'=>$sortedLCbook]);
+        return view('labbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'services'=>$services, 'lc_medtechs'=>$lc_medtechs, 'c_pending'=>$c_pending, 'c_processing'=>$c_processing, 'c_delivered'=>$c_delivered, 'c_completed'=>$c_completed, 'c_lcbook'=>$c_lcbook, 'sortedLCbook'=>$sortedLCbook, 'c_conf'=>$c_conf, 'c_cancel'=>$c_cancel]);
 
        
     }
@@ -111,8 +97,6 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
         $lc_bookings = new Booking;
         $lc_bookings->id = Input::get('booking_id');
 
-        //$latestReq = Booking::orderBy('created_at','DESC')->first();
-        //$lc_bookings->request_no = "0" .str_pad($latestReq->id+1, 5, "0", STR_PAD_LEFT);
 
         $random = (mt_rand(1,9));
         // date('z') gives the day of year i.e today is day 106 of the year 2017
@@ -120,11 +104,14 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
         $date .= $random;
         $request_no = $date;
 
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
+
         $lc_bookings->request_no = $request_no;
         $lc_bookings->patient_name = Input::get('name');
         $lc_bookings->patient_address = Input::get('address');
         $lc_bookings->patient_phone = Input::get('phone');
-        $lc_bookings->lab = 1;
+        $lc_bookings->lab = $labid;
         $lc_bookings->service = Input::get('labtest');
         $lc_bookings->date = Input::get('date');
         $lc_bookings->time = Input::get('time');
@@ -139,25 +126,36 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
         $lc_bookings->created_at = Carbon::now();
         $lc_bookings->updated_at = Carbon::now();
         $lc_bookings->save();
-       
+
+
 
       
-        return redirect ('/lclabbooking');
+        return redirect ('/labbooking');
 
     }
 
      
 
-      public function confirm(Request $request){
-        
-       $id = $request->get('id');
+      public function confirm($id){
 
         $lc_bookings = Booking::where('id', $id)
         ->update(['status' => 'CONFIRMED' ]);
         
 
-        return back();
+        return redirect('labbooking');
     }
+
+        public function cancel($id){
+
+        $lc_bookings = Booking::where('id', $id)
+        ->update(['status' => 'CANCELLED' ]);
+        
+
+        return redirect('labbooking');
+    }
+
+     
+
 
         public function assignMedtech(Request $request){
 
@@ -175,12 +173,15 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
             $medtech = Medtech::where('medtech_name', $input_medtech)
             ->update(['assignment' => $newAss]);
 
-            return redirect ('lclabbooking');
+            return redirect ('labbooking');
         }
 
         public function deliver(Request $request){
 
             $id = $request->get('id');
+            $user = $request->get('user');
+            $date = $request->get('date');
+            $total = $request->get('total');
 
             $newPayStat = $request->input('payment');
 
@@ -188,23 +189,23 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
             ->where('id', $id)
             ->update(['payment' => $newPayStat, 'status' => 'DELIVERED']) ;
 
-            return back();
+            $sales = new Sale;
+            $sales->lab_name = $user;
+            $sales->date = $date;
+            $sales->total = $total;
+            $sales->save();
+
+
+            return redirect('labbooking');
 
         }
 
-        public function deliverunpaid(Request $request){
-            $id = $request->get('id');
-
-            $lc_bookings = Booking::where('id', $id)
-            ->update(['status'=> 'DELIVERED']);
-            return back();
-        }
 
         public function showUpload($id){
 
-            $lc_bookings = Booking::find($id);
+            $bookings = Booking::find($id);
 
-            return view ('upload', ['lc_bookings'=>$lc_bookings]);
+            return view ('/pages/upload', ['bookings'=>$bookings]);
 
         }
 
@@ -263,7 +264,7 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
             echo $message_status;
 
 
-        return redirect ('lclabbooking');
+        return redirect ('labbooking');
         }
 
         public function showInvoice($id){
@@ -276,7 +277,11 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
 
         public function showProcess($id){
             
-            $lc_bookings = Booking::find($id);
+        $bookings = Booking::find($id);
+
+
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
 
 
         $eight = '8:00 - 9:00';
@@ -287,32 +292,166 @@ return view('lclabbooking', ['lc_bookings'=>$lc_bookings,'labs'=>$labs, 'service
         $two = '2:00 - 3:00';
         $three = '3:00 - 4:00';
 
-        $medtechs_eight = Medtech::where('time_avail',$eight)->where('lab_designation',1)
+        $medtechs_eight = Medtech::where('time_avail',$eight)->where('lab_designation',$labid)
         ->get();
 
-         $medtechs_nine = Medtech::where('time_avail',$nine)->where('lab_designation',1)
+         $medtechs_nine = Medtech::where('time_avail',$nine)->where('lab_designation',$labid)
         ->get();
 
-         $medtechs_ten = Medtech::where('time_avail',$ten)->where('lab_designation',1)
+         $medtechs_ten = Medtech::where('time_avail',$ten)->where('lab_designation',$labid)
         ->get();
 
-         $medtechs_eleven = Medtech::where('time_avail',$eleven)->where('lab_designation',1)
+         $medtechs_eleven = Medtech::where('time_avail',$eleven)->where('lab_designation',$labid)
         ->get();
 
-         $medtechs_one = Medtech::where('time_avail',$one)->where('lab_designation',1)
+         $medtechs_one = Medtech::where('time_avail',$one)->where('lab_designation',$labid)
         ->get();
 
-         $medtechs_two = Medtech::where('time_avail',$two)->where('lab_designation',1)
+         $medtechs_two = Medtech::where('time_avail',$two)->where('lab_designation',$labid)
         ->get();
 
-         $medtechs_three = Medtech::where('time_avail',$three)->where('lab_designation',1)
+         $medtechs_three = Medtech::where('time_avail',$three)->where('lab_designation',$labid)
         ->get();
 
 
-        return view('process', ['lc_bookings'=>$lc_bookings, 'medtechs_eight'=>$medtechs_eight, 'medtechs_nine'=>$medtechs_nine, 'medtechs_ten'=>$medtechs_ten, 'medtechs_eleven'=>$medtechs_eleven, 'medtechs_one'=>$medtechs_one, 'medtechs_two'=>$medtechs_two, 'medtechs_three'=>$medtechs_three]);
+        return view('/pages/process', ['bookings'=>$bookings, 'medtechs_eight'=>$medtechs_eight, 'medtechs_nine'=>$medtechs_nine, 'medtechs_ten'=>$medtechs_ten, 'medtechs_eleven'=>$medtechs_eleven, 'medtechs_one'=>$medtechs_one, 'medtechs_two'=>$medtechs_two, 'medtechs_three'=>$medtechs_three]);
         }
 
-    
+
+        public function bookdetails($id){
+
+             $lc_bookings = Booking::find($id);
+
+
+            return view('/pages/bookdetails', ['lc_bookings'=>$lc_bookings]);
+        }
+
+        public function details($id){
+
+         $bookings = Booking::find($id);
+        
+
+        return view('/pages/rebook', ['bookings'=>$bookings]);
+        }
+
+         public function rebook($id){
+
+        $bookings = Booking::where('id', $id)
+        ->update(['status' => 'PENDING' ]);
+        
+
+        return redirect('labbooking');
+        }
+
+        public function showPay($id){
+
+        $bookings = Booking::find($id);
+        
+
+        return view('/pages/deliver', ['bookings'=>$bookings]);
+        }
+
+        public function showPending(){
+
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
+
+            $bookings = Booking::where('lab',$labid)
+            ->where('status', 'PENDING')
+            ->get();
+
+            $sortedpend = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('pages/pending', ['sortedpend'=>$sortedpend]);
+        }
+
+        public function showProc(){
+
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
+
+            $bookings = Booking::where('lab',$labid)
+            ->where('status', 'PROCESSING')
+            ->get();
+
+            $sortedproc = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('pages/processing', ['sortedproc'=>$sortedproc]);
+        }
+
+        public function showDelv(){
+
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
+
+            $bookings = Booking::where('lab',$labid)
+            ->where('status', 'DELIVERED')
+            ->get();
+
+            $sorteddelv = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('pages/delv', ['sorteddelv'=>$sorteddelv]);
+        }
+
+        public function showComp(){
+
+        $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+        $labid = $collection->lab_id;
+
+            $bookings = Booking::where('lab',$labid)
+            ->where('status', 'COMPLETED')
+            ->get();
+
+            $sortedcomp = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('pages/comp', ['sortedcomp'=>$sortedcomp]);
+        }
+        
+        public function showCanc(){
+            $collection = DB::table('laboratories')->where('user_id', Auth::id())->first();
+            $labid = $collection->lab_id;
+
+            $bookings = Booking::where('lab',$labid)
+            ->where('status', 'CANCELLED')
+            ->get();
+
+            $sortedcanc = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('pages/cancel', ['sortedcanc'=>$sortedcanc]);
+        }
+
+        public function adminpCanc(){
+            
+
+            $bookings = Booking::where('status', 'CANCELLED')
+            ->get();
+
+            $sortedcanc = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('adminp/cancel', ['sortedcanc'=>$sortedcanc]);
+        }
+
+        public function adminpPend(){
+            
+
+            $bookings = Booking::where('status', 'PENDING')
+            ->get();
+
+            $sortedpend = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('adminp/pending', ['sortedpend'=>$sortedpend]);
+        }
+
+        public function adminpComp(){
+            
+
+            $bookings = Booking::where('status', 'COMPLETED')
+            ->get();
+
+            $sortedcomp = array_reverse(array_sort($bookings, SORT_DESC, 'created_at'));
+
+            return view('adminp/comp', ['sortedcomp'=>$sortedcomp]);
+        }
 
       
     

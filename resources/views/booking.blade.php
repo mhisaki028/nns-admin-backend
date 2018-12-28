@@ -43,6 +43,8 @@
 
                          <h5>
                             Pending: <span class="label label-inverse">{{ $c_pending }}</span> 
+                            Confirmed: <span class="label label-inverse">{{ $c_conf }}</span> 
+                            Cancelled: <span class="label label-inverse">{{ $c_cancel }}</span> 
                             Processing:  <span class="label label-inverse">{{ $c_processing }}</span>
                             Delivered:  <span class="label label-inverse">{{ $c_delivered }}</span> 
                             Completed:  <span class="label label-inverse">{{ $c_completed }}</span>
@@ -54,7 +56,9 @@
                             <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
                             <select type="search" class="select-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
                                     <option value="">All</option> 
-                                    <option value="PENDING">PENDING</option> 
+                                    <option value="PENDING">PENDING</option>
+                                    <option value="CONFIRMED">CONFIRMED</option> 
+                                    <option value="CANCELLED">CANCELLED</option> 
                                     <option value="PROCESSING">PROCESSING</option>  
                                     <option value="DELIVERED">DELIVERED</option>
                                     <option value="COMPLETED">COMPLETED</option>

@@ -26,7 +26,7 @@
 
 
     <!-- Custom CSS -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
       <!--alerts CSS -->
     <link href="plugins/bower_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
     <!-- Footable CSS -->
@@ -47,7 +47,7 @@
 
 </head>
  
-    <body style="font-family: Ubuntu">
+    <body>
     <!-- ============================================================== -->
     <!-- Preloader -->
     <!-- ============================================================== -->
@@ -92,11 +92,6 @@
     <script src="plugins/bower_components/owl.carousel/owl.custom.js"></script>
 
     <script src="plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
-
-
-   
-
-
     
     <!--Style Switcher -->
     <script src="plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>
@@ -155,12 +150,14 @@
       var mtname = button.data('mtname')
       var mtno = button.data('mtno')
       var mttime = button.data('mttime')
+      var mtstat = button.data('mtstat')
 
       var modal = $(this)
       modal.find('.modal-body #medtech_id').val(mtid)
       modal.find('.modal-body #medtech_name').val(mtname)
       modal.find('.modal-body #medtech_no').val(mtno)
       modal.find('.modal-body #time_avail').val(mttime)
+      modal.find('.modal-body #med_stat').val(mtstat)
 });
 
   ///////////////////Lab
@@ -298,6 +295,20 @@ $(document).on('show.bs.modal','#modal-view', function (event) {
 
       var modal = $(this)
       modal.find('.modal-body #service_id').val(sid)
+   
+    
+     
+});
+
+   $(document).on('show.bs.modal','#modal-deletelab', function (event) {
+
+      console.log('Modal Opened');
+      var button = $(event.relatedTarget)
+      var lid = button.data('lid')
+   
+
+      var modal = $(this)
+      modal.find('.modal-body #lab_id').val(lid)
    
     
      

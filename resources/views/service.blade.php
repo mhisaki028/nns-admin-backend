@@ -40,6 +40,13 @@
                         <div class="white-box" style="border-radius: 15px;">
                 
                            <h3>Total Available Services: <span class="label label-success m-r-10">{{ $c_service }}</span></h3>
+                            <h3>Service Location</h3>
+                              <h5>
+                            <span class="label label-danger">1</span> LC Diagnostic Center
+                            <span class="label label-success">2</span> Quezon MMG Plaza
+                            <span class="label label-info">3</span> LUDACS
+                        
+                            </h5>
                             <div class="text-right">
                            
                             <input type="text" placeholder="Search..." class="light-table-filter" data-table="order-table" style="border-width: 1px;border-radius: 10px; padding-left: 10px; height: 30px;">
@@ -53,6 +60,7 @@
                                                 <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Description</th>
+                                                <th>Location</th>
                                                 <th>Price</th>
                                               
                                             </tr>
@@ -65,6 +73,7 @@
                                                 <td>{{$service->service_id}}</td>
                                                 <td>{{$service->service_name}}</td>
                                                 <td>{{$service->service_desc}}</td>
+                                                <td>{{$service->service_loc}}</td>
                                                 <td>{{$service->service_price}}</td>
                                              
                                             </tr>
